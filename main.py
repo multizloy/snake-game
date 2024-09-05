@@ -171,7 +171,7 @@ def run():
         update_snake()
         draw_objects()
         pygame.display.update()
-        clock.tick(15)  # limit the frame rate to 15 FPS
+        clock.tick(20)  # limit the frame rate to 20 FPS
 
 
 if __name__ == "__main__":
