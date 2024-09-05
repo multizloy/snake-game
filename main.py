@@ -101,3 +101,23 @@ def game_over():
             or snake_pos[0][1] > HEIGHT - BLOCK_SIZE
             or snake_pos[0][1] < 0
         )
+# displaying the game over screen
+def game_over_screen() -> None:
+    global score
+    win.fill((0, 0, 0))
+    game_over_font = pygame.font.SysFont("Comic Sans MS", 30)
+    game_over_text = game_over_font.render(f'Game Over. Score: {score}', True, WHITE)
+    win.blit(game_over_text, (WIDTH // 2 - game_over_text.get_width() // 2, HEIGHT // 2 - game_over_text.get_height() // 2))
+    pygame.display.update()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    run()    # restart the game
+                    return
+                elif event.key == pygame.K_q:
+                    pygame.quit()
+                    return
