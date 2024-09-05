@@ -59,3 +59,30 @@ def draw_objects() -> None:
     # render the score
     score_text = score_font.render("Score: " + str(score), True, WHITE)
     win.blit(score_text, (10, 10))  # position of the score
+
+
+# updating the snake position\
+
+
+def update_snake() -> None:
+    global food_pos, score
+    new_head = [snake_pos[0][0] + snake_speed[0], snake_pos[0][1] + snake_speed[1]]
+
+    if teleport_walls:
+        # if the new head position is out of bounds, teleport it to the other side
+        if new_head[0] >= WIDTH:
+            new_head[0] = 0
+        elif new_head[0] < 0:
+            new_head[0] = WIDTH - BLOCK_SIZE
+        elif new_head[1] >= HEIGHT:
+            new_head[1] = 0
+        elif new_head[1] < 0:
+            new_head[1] = HEIGHT - BLOCK_SIZE
+
+    if new_head == food_pos:
+        food_pos = generate_food()
+        score += 1  # increase the score if food eaten
+    else:
+        snake_pos.pop()  # remove the tail if not eaten
+
+    snake_pos.insert(0, new_head)  # add the new head to the snake
