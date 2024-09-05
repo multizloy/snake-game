@@ -86,3 +86,18 @@ def update_snake() -> None:
         snake_pos.pop()  # remove the tail if not eaten
 
     snake_pos.insert(0, new_head)  # add the new head to the snake
+
+
+# game over condition
+def game_over():
+    # game over when snake hits the boundaries or runs into itself
+    if teleport_walls:
+        return snake_pos[0] in snake_pos[1:]
+    else:
+        return (
+            snake_pos[0] in snake_pos[1:]
+            or snake_pos[0][0] > WIDTH - BLOCK_SIZE
+            or snake_pos[0][0] < 0
+            or snake_pos[0][1] > HEIGHT - BLOCK_SIZE
+            or snake_pos[0][1] < 0
+        )
