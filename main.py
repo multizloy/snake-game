@@ -19,7 +19,7 @@ RED = (255, 0, 0)
 pygame.init()
 
 # setting up display
-window = pygame.display.set_mode((WIDTH, HEIGHT))
+win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake Game")
 
 # clock
@@ -40,3 +40,22 @@ def generate_food() -> list:
         food_pos = [x, y]
         if food_pos not in snake_pos:
             return food_pos
+
+
+food_pos = generate_food()
+
+
+# drawing on screen
+def draw_objects() -> None:
+    win.fill((0, 0, 0))
+    for pos in snake_pos:
+        pygame.draw.rect(
+            win, WHITE, pygame.Rect(pos[0], pos[1], BLOCK_SIZE, BLOCK_SIZE)
+        )
+
+    pygame.draw.rect(
+        win, RED, pygame.Rect(food_pos[0], food_pos[1], BLOCK_SIZE, BLOCK_SIZE)
+    )
+    # render the score
+    score_text = score_font.render("Score: " + str(score), True, WHITE)
+    win.blit(score_text, (10, 10))  # position of the score
