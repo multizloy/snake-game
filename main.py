@@ -101,13 +101,21 @@ def game_over():
             or snake_pos[0][1] > HEIGHT - BLOCK_SIZE
             or snake_pos[0][1] < 0
         )
+
+
 # displaying the game over screen
 def game_over_screen() -> None:
     global score
     win.fill((0, 0, 0))
     game_over_font = pygame.font.SysFont("Comic Sans MS", 30)
-    game_over_text = game_over_font.render(f'Game Over. Score: {score}', True, WHITE)
-    win.blit(game_over_text, (WIDTH // 2 - game_over_text.get_width() // 2, HEIGHT // 2 - game_over_text.get_height() // 2))
+    game_over_text = game_over_font.render(f"Game Over. Score: {score}", True, WHITE)
+    win.blit(
+        game_over_text,
+        (
+            WIDTH // 2 - game_over_text.get_width() // 2,
+            HEIGHT // 2 - game_over_text.get_height() // 2,
+        ),
+    )
     pygame.display.update()
     while True:
         for event in pygame.event.get():
@@ -116,8 +124,55 @@ def game_over_screen() -> None:
                 return
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
-                    run()    # restart the game
+                    run()  # restart the game
                     return
                 elif event.key == pygame.K_q:
                     pygame.quit()
                     return
+
+
+def run():
+    global snake_speed, snake_pos, food_pos, score
+    snake_pos = [[WIDTH // 2, HEIGHT // 2]]
+    snake_speed = [0, BLOCK_SIZE]
+    food_pos = generate_food()
+    score = 0
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            keys = pygame.key.get_pressed()
+            for key in keys:
+                if keys[pygame.K_UP]:
+                    # when up is pressed, the snake moves down, ignore the input
+                    if snake_speed[1] == BLOCK_SIZE:
+                        continue
+                    snake_speed = [0, -BLOCK_SIZE]
+                if keys[pygame.K_DOWN]:
+                    # when down is pressed, the snake moves up, ignore the input
+                    if snake_speed[1] == -BLOCK_SIZE:
+                        continue
+                    snake_speed = [0, BLOCK_SIZE]
+                if keys[pygame.K_LEFT]:
+                    # when left is pressed, the snake moves right, ignore the input
+                    if snake_speed[0] == BLOCK_SIZE:
+                        continue
+                    snake_speed = [-BLOCK_SIZE, 0]
+                if keys[pygame.K_RIGHT]:
+                    # when right is pressed, the snake moves left, ignore the input
+                    if snake_speed[0] == -BLOCK_SIZE:
+                        continue
+                    snake_speed = [BLOCK_SIZE, 0]
+
+        if game_over():
+            game_over_screen()
+            return
+        update_snake()
+        draw_objects()
+        pygame.display.update()
+        clock.tick(15)  # limit the frame rate to 15 FPS
+
+
+if __name__ == "__main__":
+    run()
